@@ -1,0 +1,82 @@
+<div class="py-3 p-lg-0">
+  <div id="login-card">
+    <div class="form-title mb-3">Create Account</div>
+    <form [formGroup]="signupForm" (submit)="signUp()" style="font-size: 13px">
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          [errorStateMatcher]="matcher"
+          matInput
+          type="text"
+          formControlName="name"
+        />
+        <mat-error *ngIf="signupForm.get('name').hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <ngx-mat-intl-tel-input
+          [errorStateMatcher]="matcher"
+          [preferredCountries]="['in']"
+          [enablePlaceholder]="true"
+          [enableSearch]="true"
+          name="phone"
+          formControlName="phone"
+          #phone
+        ></ngx-mat-intl-tel-input>
+        <mat-hint *ngIf="phone.focused"
+          >e.g. {{ phone.selectedCountry.placeHolder }}</mat-hint
+        >
+        <mat-error *ngIf="signupForm.get('phone').hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          [errorStateMatcher]="matcher"
+          type="email"
+          placeholder="Ex. pat@example.com"
+          formControlName="email"
+        />
+        <mat-error
+          *ngIf="
+            signupForm.get('email').invalid &&
+            !signupForm.get('email').hasError('required')
+          "
+        >
+          Please enter a valid Email ID
+        </mat-error>
+        <mat-error *ngIf="signupForm.get('email').hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          [errorStateMatcher]="matcher"
+          type="password"
+          matInput
+          formControlName="password"
+        />
+        <mat-error *ngIf="signupForm.get('password').hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        class="w-100 mt-4"
+        type="submit"
+        color="primary"
+      >
+        CREATE
+      </button>
+    </form>
+    <div class="mt-5 text-center">
+      <mat-label class="mr-2">Have an account?</mat-label>
+      <a routerLink="/user/login">Login</a>
+    </div>
+  </div>
+</div>

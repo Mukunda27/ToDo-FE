@@ -1,1 +1,37 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/theming";
+@import "_custom-theme.scss";
+
+@include mat-core();
+
+$to-do-fe-primary: mat-palette($mat-indigo);
+$to-do-fe-accent: mat-palette($mat-blue);
+$to-do-fe-warn: mat-palette($mat-red);
+
+$to-do-fe-theme: mat-light-theme(
+  $to-do-fe-primary,
+  $to-do-fe-accent,
+  $to-do-fe-warn
+);
+
+@include angular-material-theme($to-do-fe-theme);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Segoe UI Historic", "Segoe UI" "Helvetica Neue", sans-serif;
+}
+
+.custom-primary {
+  background-color: $primary;
+}
+
+.custom-accent {
+  background-color: $accent;
+}
+
+.custom-bg {
+  background-color: #fafafa;
+}

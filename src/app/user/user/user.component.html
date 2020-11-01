@@ -1,0 +1,54 @@
+<div class="user-home d-flex flex-column h-100 custom-primary">
+  <div class="header custom-primary p-4">
+    <div class="logo" href="#" class="d-flex align-items-center">
+      <img
+        src="../../../assets/logo.svg"
+        width="30"
+        height="30"
+        class="d-inline-block align-top mr-3"
+        alt=""
+        loading="lazy"
+      />
+      <div class="title">To Do</div>
+    </div>
+  </div>
+  <div class="user-home-content flex-grow-1 custom-bg py-5">
+    <div class="container h-100">
+      <div class="row h-100 d-flex align-items-center">
+        <div class="col-12 col-lg-7">
+          <div class="hero-container pt-5 pt-lg-0">
+            <div class="hero-title mb-3">
+              To-Do list for improving your productivity
+            </div>
+            <p class="hero-content mb-3">
+              Perfect for managing every day tasks effeciently to get more
+              things done.
+            </p>
+            <ul class="hero-list mb-3">
+              <li class="d-flex align-items-top">
+                <mat-icon class="mr-2" color="accent">check</mat-icon>
+                <p>Add tasks, set due dates and never miss anything</p>
+              </li>
+              <li class="d-flex align-items-top">
+                <mat-icon class="mr-2" color="accent">check</mat-icon>
+                <p>
+                  Create custom lists and tasks to them for better organization
+                </p>
+              </li>
+              <li class="d-flex align-items-top">
+                <mat-icon class="mr-2" color="accent">check</mat-icon>
+                <p>
+                  Stay connected with your friends and know what thwy are upto
+                  with real-time updates
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-12 col-lg-5">
+          <router-outlet> </router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

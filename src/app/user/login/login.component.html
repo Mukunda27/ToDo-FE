@@ -1,0 +1,63 @@
+<div class="py-3 p-lg-0 mb-5 mb-lg-0">
+  <div id="login-card">
+    <div class="form-title mb-4">Welcome Back</div>
+    <form
+      (submit)="onLogin(loginForm)"
+      #loginForm="ngForm"
+      style="font-size: 13px"
+    >
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          ngModel
+          name="email"
+          type="email"
+          #emailInput="ngModel"
+          required
+          email
+          [errorStateMatcher]="matcher"
+          placeholder="Ex. pat@example.com"
+        />
+        <mat-error
+          *ngIf="emailInput.invalid && !emailInput.hasError('required')"
+        >
+          Please enter a valid Email ID
+        </mat-error>
+        <mat-error *ngIf="emailInput.hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          type="password"
+          name="password"
+          ngModel
+          matInput
+          #passwordInput="ngModel"
+          required
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error *ngIf="passwordInput.hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <div id="forgot-password">
+        <a routerLink="/user/password-reset">Forgot your password</a>
+      </div>
+      <button
+        mat-raised-button
+        class="w-100 mt-4"
+        type="submit"
+        color="primary"
+      >
+        LOGIN
+      </button>
+    </form>
+    <div class="mt-5 text-center">
+      <mat-label class="mr-2">New Member?</mat-label>
+      <a routerLink="/user/signup">Create Account</a>
+    </div>
+  </div>
+</div>

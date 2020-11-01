@@ -1,0 +1,55 @@
+@import "../../../_custom-theme.scss";
+
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+
+$large: 992px;
+
+@mixin large {
+  @media (min-width: #{$large}) {
+    @content;
+  }
+}
+
+.header {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 25px;
+    font-family: "Fredoka One", cursive;
+  }
+}
+
+.user-home-content {
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+}
+
+.hero-list {
+  list-style: none;
+  padding: 0;
+
+  li {
+    @include font-size(1rem);
+  }
+}
+
+.hero-content {
+  @include font-size(1.35rem);
+}
+
+.hero-title {
+  @include font-size(2.5rem);
+  font-weight: 700;
+}
+
+.hero-container {
+  width: 100%;
+  line-height: 1.2;
+
+  @include large {
+    width: 75%;
+  }
+}

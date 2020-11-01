@@ -1,0 +1,7 @@
+// Import material theming functions
+@import "~@angular/material/theming";
+
+// Create your Sass color vars (will be available in all the project)
+$primary: mat-color($mat-indigo, 500);
+$accent: mat-color($mat-blue, 500);
+$custom-bg: #fafafa;
