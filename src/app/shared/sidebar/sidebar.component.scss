@@ -1,0 +1,260 @@
+@import "../../../_custom-theme.scss";
+
+$medium: 768px;
+
+@mixin medium {
+  @media (max-width: #{$medium}) {
+    @content;
+  }
+}
+
+#sidebar {
+  top: 0;
+  left: 0;
+  height: 100vh;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 30px 10px;
+  color: white;
+  z-index: 899;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+#sidebar.collapsed {
+  padding: 30px 7px;
+}
+
+#sidebar.collapsed #sidebar-content {
+  padding: 0 8px;
+}
+
+#sidebar:not(.collapsed) {
+  position: relative;
+  @include medium {
+    position: fixed;
+  }
+}
+
+#sidebar-content::-webkit-scrollbar-track {
+  background-color: #4b5172;
+  border-radius: 10px;
+}
+
+#sidebar-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+#sidebar-content::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #020827;
+}
+
+#sidebar-content {
+  padding: 0 40px;
+
+  overflow-y: auto;
+}
+
+#sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  #sidebar-header-text {
+    font-size: 25px;
+    font-family: "Fredoka One", cursive;
+  }
+}
+
+#sidebar-menu {
+  .menu-group-title {
+    font-size: 0.9rem;
+    color: $accent;
+    opacity: 0.8;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  li {
+    font-size: 1rem;
+    padding: 0.25rem;
+    position: relative;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0px;
+      width: 0px;
+      top: 50%;
+      z-index: 800;
+      height: 0px;
+      border-radius: 10px;
+      background-color: $accent;
+      opacity: 0.8;
+      transition: all 0.4s ease;
+    }
+  }
+
+  li a {
+    text-decoration: none;
+    color: white;
+  }
+
+  li.selected::before {
+    position: absolute;
+    content: "";
+    width: 6px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border-radius: 20px;
+    background-color: $accent;
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+}
+
+#sidebar:not(.collapsed) {
+  li:hover::after {
+    width: 10px;
+    height: 5px;
+    transform: translateX(5px);
+  }
+}
+
+#sidebar {
+  li.selected::before {
+    transform: translateX(-50px);
+  }
+
+  &.collapsed {
+    li.selected::before {
+      transform: translateX(-15px);
+    }
+
+    #sidebar-collapse {
+      #bottom,
+      #center {
+        left: 0;
+      }
+      #arrow {
+        transform: rotateY(180);
+        right: 0;
+      }
+    }
+  }
+}
+
+#new-task-button {
+  border: 3px solid $accent;
+  font-size: 14px;
+  border-radius: 50px;
+  color: white;
+  outline: none;
+  transition: all 0.2s ease-in;
+}
+
+#new-task-button:focus {
+  outline: none;
+}
+
+#new-task-button:hover {
+  outline: none;
+  box-shadow: 0 0.5em 0.5em -0.4em $accent;
+  transform: translateY(-2px);
+}
+
+#new-list-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  border-radius: 2px;
+  background: $primary;
+  color: white;
+
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 900;
+    height: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: $accent;
+    opacity: 0.3;
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    left: 0px;
+    width: 0;
+    bottom: 0px;
+    z-index: 999;
+    height: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    background-color: $accent;
+    transition: width 0.3s ease-in;
+  }
+}
+
+#new-list-input input {
+  border-style: none;
+  background: transparent;
+  outline: none;
+  flex-grow: 1;
+  width: 100px;
+  font-size: 0.8rem;
+  color: white;
+}
+
+#new-list-input mat-icon {
+  cursor: pointer;
+}
+
+#new-list-input:focus-within {
+  &:after {
+    width: 100%;
+  }
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: white;
+}
+
+#overlay {
+  display: block;
+  opacity: 1;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 898;
+}

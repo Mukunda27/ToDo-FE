@@ -16,7 +16,12 @@ $large: 992px;
   justify-content: space-between;
   align-items: center;
 
-  .title {
+  a {
+    text-decoration: none;
+  }
+
+  a .title {
+    color: white;
     font-size: 25px;
     font-family: "Fredoka One", cursive;
   }
@@ -25,6 +30,11 @@ $large: 992px;
 .user-home-content {
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
+
+  @include large {
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+  }
 }
 
 .hero-list {
@@ -41,8 +51,8 @@ $large: 992px;
 }
 
 .hero-title {
-  @include font-size(2.5rem);
-  font-weight: 700;
+  @include font-size(2.25rem);
+  font-weight: 800;
 }
 
 .hero-container {

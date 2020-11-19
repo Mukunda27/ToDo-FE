@@ -23,11 +23,16 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class SignupComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
   signupForm: FormGroup;
-
+  isLoading = false;
   constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
+    this.userService.userCreationFailed.subscribe(() => {
+      console.log('creation failed');
+      this.isLoading = false;
+    });
+
     this.signupForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
       phone: new FormControl('', [Validators.required]),
@@ -41,6 +46,7 @@ export class SignupComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.userService.createUser(this.signupForm.value.name, this.signupForm.value.phone,
       this.signupForm.value.email, this.signupForm.value.password);
   }

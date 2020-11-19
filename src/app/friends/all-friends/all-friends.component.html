@@ -1,0 +1,41 @@
+<div class="h-100 position-relative">
+  <div *ngIf="fetching" id="progress-indicator">
+    <div id="inner-container" class="w-100">
+      <span id="progress-bar-1"></span>
+      <span id="progress-bar-2"></span>
+    </div>
+  </div>
+  <div *ngIf="!fetching && friends.length === 0" id="empty-list">
+    Hmm! You do not have any friends currently. Start discovering new friends.
+  </div>
+
+  <div
+    *ngIf="friends.length > 0"
+    id="friends-card"
+    class="my-3 px-md-4 px-2 py-4 mx-auto"
+  >
+    <div *ngFor="let friend of friends" class="d-flex align-items-center mb-4">
+      <div id="user-name" class="flex-grow-1 d-flex flex-column">
+        <div id="name">
+          {{ friend.name }}
+          <span
+            id="online-indicator"
+            [ngStyle]="{
+              'background-color': isOnline(friend.userID) ? 'green' : '#bbb'
+            }"
+            class="ml-2"
+          ></span>
+        </div>
+        <div id="mail">{{ friend.email }}</div>
+      </div>
+
+      <a
+        id="remove-friend"
+        class="p-2 ml-auto"
+        (click)="removeFriend(friend.userID)"
+      >
+        Remove
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,47 @@
+@import "../../../_custom-theme.scss";
+
+$medium: 768px;
+
+@mixin medium {
+  @media (max-width: #{$medium}) {
+    @content;
+  }
+}
+
+.notification {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  background-color: $primary;
+  border-radius: 5px;
+  z-index: 1001;
+}
+
+#message-notification {
+  border: 1px solid $accent;
+  background-color: $primary;
+}
+
+#error-notification {
+  border: 1px solid rgb(83, 39, 31);
+  background-color: tomato;
+}
+
+.message {
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+
+  @include medium {
+    font-size: 13px;
+  }
+}
+
+.close {
+  cursor: pointer;
+  margin-left: 75px;
+  @include medium {
+    margin-left: 25px;
+  }
+}

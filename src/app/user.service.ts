@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from './user.model';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.component';
+import { SocketService } from './socket.service';
+import { NotificationService } from './notification.service';
+import { environment } from '../environments/environment';
+
+const BACKEND_URL = environment.apiUrl + 'user/';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +15,15 @@ import { CustomSnackbarComponent } from './custom-snackbar/custom-snackbar.compo
 export class UserService {
   private isAuthenticated = false;
   private authenticatedUser = new BehaviorSubject<User>(null);
+  userCreationFailed = new Subject<void>();
+  userLoginFailed = new Subject<void>();
   private tokenTimer: NodeJS.Timer;
 
   constructor(
     private httpClient: HttpClient,
     private router: Router,
-    private snackBar: MatSnackBar) { }
+    private socketService: SocketService,
+    private notificationService: NotificationService) { }
 
   isUserAuthenticated(): boolean {
     return this.isAuthenticated;
@@ -30,32 +36,29 @@ export class UserService {
   autoLogin() {
     const authenticationInformation = this.fetchAuthenticationToken();
     if (!authenticationInformation.token || !authenticationInformation.expirationDate
-      || !authenticationInformation.name || !authenticationInformation.userID) {
+      || !authenticationInformation.name || !authenticationInformation.userID || !authenticationInformation.email) {
       return;
     }
 
-    const expiresIn =
-      authenticationInformation.expirationDate.getTime() - new Date().getTime();
+    const expiresIn = authenticationInformation.expirationDate.getTime() - new Date().getTime();
     if (expiresIn > 0) {
-      this.handleUserAuthentication(authenticationInformation.name, authenticationInformation.userID, authenticationInformation.token,
-        expiresIn / 1000);
+      this.handleUserAuthentication(authenticationInformation.name, authenticationInformation.userID,
+        authenticationInformation.email, authenticationInformation.token, expiresIn / 1000);
     }
   }
 
   createUser(name: string, phone: string, email: string, password: string) {
     const signupData = { name, phone, email, password };
-    this.httpClient.post('http://localhost:3000/api/user/create', signupData)
+    this.httpClient.post(BACKEND_URL + 'create', signupData)
       .subscribe(response => {
         this.loginUser(email, password);
       }, error => {
+        console.log('notify failed');
+        this.userCreationFailed.next();
         if (this.isEmailNotUnique(error)) {
-          this.snackBar.openFromComponent(CustomSnackbarComponent, {
-            data: 'Account with this Email already exists', duration: 5000
-          });
+          this.notificationService.showErrorNotification('Account with this email already exists');
         } else {
-          this.snackBar.openFromComponent(CustomSnackbarComponent, {
-            data: 'Something went wrong. Please try again', duration: 5000
-          });
+          this.notificationService.showErrorNotification('Something is broken. Try again after some time');
         }
       });
   }
@@ -63,27 +66,31 @@ export class UserService {
   loginUser(email: string, password: string) {
     const loginDetails = { email, password };
 
-    this.httpClient.post<{ name: string, userID: string, token: string, expiresIn: number }>
-      ('http://localhost:3000/api/user/login', loginDetails)
+    this.httpClient.post<{ name: string, userID: string, email: string, friends: any[], requests: any[], token: string, expiresIn: number }>
+      (BACKEND_URL + 'login', loginDetails)
       .subscribe(response => {
         if (response.token) {
-          console.log(response.token);
-          this.handleUserAuthentication(response.name, response.userID, response.token, response.expiresIn);
+          this.handleUserAuthentication(response.name, response.userID, response.email, response.token, response.expiresIn);
         }
       }, error => {
-        let errorMessage = 'Something went wrong. Please try again';
+        this.userLoginFailed.next();
+        let errorMessage = 'Something is broken. Try again after some time';
         if (error.error.message) {
           errorMessage = error.error.message;
         }
-        this.snackBar.openFromComponent(CustomSnackbarComponent, {
-          data: errorMessage, duration: 5000
-        });
+        this.notificationService.showErrorNotification(errorMessage);
       });
+  }
+
+  passwordResetRequest(email: string) {
+    const resetDetails = { email };
+    return this.httpClient.post<{ message: string, resetEmail: string }>
+      (BACKEND_URL + 'password-reset-request', resetDetails);
   }
 
   getAllUsers(): Observable<any> {
     return this.httpClient.get<{ users: Array<{ name: string, userID: string }> }>
-      ('http://localhost:3000/api/user/all');
+      (BACKEND_URL + 'all');
   }
 
   logout(user: User): void {
@@ -91,19 +98,36 @@ export class UserService {
     this.isAuthenticated = false;
     clearTimeout(this.tokenTimer);
     this.authenticatedUser.next(null);
+    this.socketService.disconnectSocket();
     this.goToSignIn();
   }
 
-  private handleUserAuthentication(name: string, userID: string, token: string, expiresIn: number) {
-    this.isAuthenticated = true;
-    const authenticatedUser: User = { name, userID };
+  validatePasswordResetToken(resettoken: string) {
+    const resetPasswordToken = { resettoken };
 
-    this.storeAuthenticationToken(name, userID, token, expiresIn);
+    return this.httpClient.post<{ validToken: boolean }>
+      (BACKEND_URL + 'valid-password-reset-token', resetPasswordToken);
+  }
+
+  resetPassword(resettoken: string, newPassword: string, confirmedPassword: string) {
+    const resetDetails = { resettoken, newPassword, confirmedPassword };
+
+    return this.httpClient.post<{ resetSuccess: boolean }>
+      (BACKEND_URL + 'reset-password', resetDetails);
+  }
+
+  private handleUserAuthentication(name: string, userID: string, email: string, token: string, expiresIn: number) {
+    this.isAuthenticated = true;
+    const authenticatedUser: User = { name, email, userID, };
+
+    this.socketService.setupSocketConnection(token);
+    this.storeAuthenticationToken(name, userID, email, token, expiresIn);
 
     this.tokenTimer = setTimeout(() => {
       this.logout(authenticatedUser);
     }, expiresIn * 1000);
 
+    this.router.navigate(['/task'], { queryParams: { day: 'today' } });
     this.authenticatedUser.next(authenticatedUser);
   }
 
@@ -119,24 +143,25 @@ export class UserService {
     return false;
   }
 
-  private storeAuthenticationToken(name: string, userID: string, token: string, expiresIn: number) {
+  private storeAuthenticationToken(name: string, userID: string, email: string, token: string, expiresIn: number) {
     const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
     console.log('storeAuthenticationToken');
 
     localStorage.setItem('authenticatedUserName', name);
     localStorage.setItem('authenticatedUserID', userID);
+    localStorage.setItem('authenticatedUserEmail', email);
     localStorage.setItem('authenticationToken', token);
     localStorage.setItem('expirationDate', expirationDate.toISOString());
   }
 
-  fetchAuthenticationToken(): { name: string, userID: string, token: string, expirationDate: Date } {
+  fetchAuthenticationToken(): { name: string, userID: string, email: string, token: string, expirationDate: Date } {
     const name = localStorage.getItem('authenticatedUserName');
     const userID = localStorage.getItem('authenticatedUserID');
-
+    const email = localStorage.getItem('authenticatedUserEmail');
     const token = localStorage.getItem('authenticationToken');
     const expirationDate = localStorage.getItem('expirationDate');
 
-    return { name, userID, token, expirationDate: new Date(expirationDate) };
+    return { name, userID, email, token, expirationDate: new Date(expirationDate) };
   }
 }
 

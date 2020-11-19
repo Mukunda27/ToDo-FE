@@ -1,0 +1,33 @@
+<div
+  *ngIf="showMessage"
+  id="message-notification"
+  class="notification p-3 d-flex align-items-center"
+>
+  <fa-icon [icon]="faBell" [styles]="{ color: 'white' }" size="lg"></fa-icon>
+  <span class="message ml-3">{{ message }}</span>
+  <fa-icon
+    [icon]="faTimes"
+    class="close"
+    [styles]="{ color: 'white' }"
+    (click)="closeMessage()"
+  ></fa-icon>
+</div>
+
+<div
+  *ngIf="showError"
+  id="error-notification"
+  class="notification p-3 d-flex align-items-center"
+>
+  <fa-icon
+    [icon]="faExclamationCircle"
+    [styles]="{ color: 'white' }"
+    size="lg"
+  ></fa-icon>
+  <span class="message ml-3">{{ error }}</span>
+  <fa-icon
+    [icon]="faTimes"
+    class="close"
+    [styles]="{ color: 'white' }"
+    (click)="closeError()"
+  ></fa-icon>
+</div>

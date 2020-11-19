@@ -1,6 +1,8 @@
-<div class="py-3 p-lg-0 mb-5 mb-lg-0">
+<div class="py-3 p-lg-0 mb-5 mb-lg-0 position-relative">
+  <span *ngIf="isLoading" id="progress-bar-1"></span>
+  <span *ngIf="isLoading" id="progress-bar-2"></span>
   <div id="login-card">
-    <div class="form-title mb-4">Welcome Back</div>
+    <div class="form-title mb-3">Welcome Back</div>
     <form
       (submit)="onLogin(loginForm)"
       #loginForm="ngForm"
@@ -48,7 +50,7 @@
       </div>
       <button
         mat-raised-button
-        class="w-100 mt-4"
+        class="w-100 mt-4 py-1"
         type="submit"
         color="primary"
       >

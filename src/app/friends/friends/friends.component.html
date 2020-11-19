@@ -1,0 +1,38 @@
+<div class="prople-dashboard d-flex h-100 overflow-hidden">
+  <div>
+    <app-sidebar> </app-sidebar>
+  </div>
+  <div class="p-lg-4 p-2 flex-grow-1 h-100 overflow-auto">
+    <div class="d-flex flex-column h-100">
+      <div>
+        <app-header> </app-header>
+      </div>
+      <div class="task-area flex-grow-1 p-lg-4 p-2 d-flex flex-column">
+        <div class="d-flex my-3" id="friends-area-nav">
+          <a
+            [routerLink]="['/friends/all-friends']"
+            routerLinkActive="selected"
+            class="nav-item mr-2 mr-lg-4 p-lg-2 p-1"
+          >
+            All Friends
+          </a>
+          <a
+            [routerLink]="['/friends/discover']"
+            routerLinkActive="selected"
+            class="nav-item mx-2 mx-lg-4 p-lg-2 p-1"
+            >Discover</a
+          >
+          <a
+            [routerLink]="['/friends/requests']"
+            routerLinkActive="selected"
+            class="nav-item ml-2 ml-lg-4 p-lg-2 p-1"
+            >Requests</a
+          >
+        </div>
+        <div class="flex-grow-1">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

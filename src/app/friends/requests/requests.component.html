@@ -1,0 +1,63 @@
+<div class="h-100 position-relative">
+  <div *ngIf="fetching" id="progress-indicator">
+    <div id="inner-container" class="w-100">
+      <span id="progress-bar-1"></span>
+      <span id="progress-bar-2"></span>
+    </div>
+  </div>
+  <div *ngIf="!fetching && requests.length === 0" id="empty-list">
+    You do not have any pending requests. Come back later.
+  </div>
+  <div
+    *ngIf="requests.length > 0"
+    id="friends-card"
+    class="my-3 px-md-4 px-2 py-4 mx-auto"
+  >
+    <div
+      *ngFor="let request of requests"
+      class="d-flex justify-content-between align-items-center mb-4"
+    >
+      <div id="user-name" class="flex-grow-1 d-flex flex-column">
+        <div id="name">
+          {{ request.name }}
+          <span
+            id="online-indicator"
+            [ngStyle]="{
+              'background-color': isOnline(request.userID) ? 'green' : '#bbb'
+            }"
+            class="ml-2"
+          ></span>
+        </div>
+        <div id="mail">{{ request.email }}</div>
+      </div>
+      <div id="actions d-flex">
+        <a
+          id="accept"
+          class="d-none d-lg-inline p-2"
+          (click)="acceptRequest(request.userID)"
+        >
+          Accept
+        </a>
+        <a
+          id="reject"
+          class="d-none d-lg-inline ml-3 p-2"
+          (click)="rejectRequest(request.userID)"
+        >
+          Reject
+        </a>
+        <mat-icon
+          color="accent"
+          class="d-inline d-lg-none"
+          (click)="acceptRequest(request.userID)"
+          >check_circle
+        </mat-icon>
+        <mat-icon
+          color="warn"
+          class="d-inline d-lg-none ml-3"
+          (click)="rejectRequest(request.userID)"
+          >cancel
+        </mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

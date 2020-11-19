@@ -22,3 +22,54 @@
 button[type="submit"] {
   letter-spacing: 1px;
 }
+
+#progress-bar-1 {
+  display: inline-block;
+  position: absolute;
+  height: 4px;
+  border-radius: 15px;
+  left: 0;
+  background-color: $primary;
+  animation: progressright 2s linear infinite;
+}
+
+#progress-bar-2 {
+  display: inline-block;
+  position: absolute;
+  height: 4px;
+  border-radius: 15px;
+  right: 0;
+  background-color: $primary;
+  animation: progressleft 2s linear infinite;
+}
+
+@keyframes progressright {
+  0% {
+    opacity: 1;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 100%;
+  }
+
+  100% {
+    opacity: 0;
+    width: 100%;
+  }
+}
+
+@keyframes progressleft {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}

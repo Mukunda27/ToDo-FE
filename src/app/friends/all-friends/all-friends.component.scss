@@ -1,0 +1,143 @@
+@import "../../../_custom-theme.scss";
+
+$medium: 768px;
+$small: 576px;
+
+@mixin medium {
+  @media (max-width: #{$medium}) {
+    @content;
+  }
+}
+
+@mixin small {
+  @media (max-width: #{$small}) {
+    @content;
+  }
+}
+
+#friends-card {
+  background-color: #fdfdfd;
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 70%;
+
+  @include medium {
+    width: 80%;
+  }
+
+  @include small() {
+    width: 95%;
+  }
+  #name {
+    font-size: 16px;
+    font-weight: bold;
+
+    @include medium {
+      font-size: 14px;
+    }
+  }
+
+  #mail {
+    font-size: 14px;
+
+    @include medium {
+      font-size: 12px;
+    }
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: tomato;
+    cursor: pointer;
+    @include medium {
+      font-size: 12px;
+    }
+  }
+}
+
+#online-indicator {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  transform: translateY(2px);
+}
+
+#progress-indicator {
+  position: absolute;
+  width: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(2% 0, 100% 0%, 98% 100%, 0% 100%);
+}
+
+#empty-list {
+  position: absolute;
+  max-width: 70%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#inner-container {
+  position: relative;
+  height: 10px;
+}
+
+#progress-bar-1 {
+  display: inline-block;
+  position: absolute;
+  height: 10px;
+  left: 0;
+  background-color: $primary;
+  animation: progressright 2s linear infinite;
+}
+
+#progress-bar-2 {
+  display: inline-block;
+  position: absolute;
+  height: 10px;
+
+  right: 0;
+  background-color: $primary;
+  animation: progressleft 2s linear infinite;
+}
+
+@keyframes progressright {
+  0% {
+    opacity: 1;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 100%;
+  }
+
+  100% {
+    opacity: 0;
+    width: 100%;
+  }
+}
+
+@keyframes progressleft {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}

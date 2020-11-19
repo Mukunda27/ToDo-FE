@@ -1,0 +1,65 @@
+@import "../../_custom-theme.scss";
+
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+$large: 1200px;
+$medium: 768px;
+
+@mixin large {
+  @media (min-width: #{$large}) {
+    @content;
+  }
+}
+
+@mixin medium {
+  @media (min-width: #{$medium}) {
+    @content;
+  }
+}
+
+.header {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .title {
+    font-size: 25px;
+    font-family: "Fredoka One", cursive;
+  }
+}
+
+.page-not-found {
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  padding: 10vh 8% 0 8%;
+
+  img {
+    width: 100px;
+    height: 100px;
+
+    @include medium {
+      width: 200px;
+      height: 200px;
+    }
+
+    @include large {
+      width: 300px;
+      height: 300px;
+    }
+  }
+}
+
+button[type="button"] {
+  letter-spacing: 1px;
+  @include font-size(1.15rem);
+}
+
+.page-not-found-desc {
+  @include font-size(1.15rem);
+}
+
+.page-not-found-title {
+  @include font-size(1.75rem);
+  font-weight: 700;
+}

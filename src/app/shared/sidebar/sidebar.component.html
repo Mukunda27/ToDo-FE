@@ -1,0 +1,130 @@
+<div
+  id="sidebar"
+  [ngClass]="{ collapsed: collapsed }"
+  class="custom-primary d-flex flex-column"
+>
+  <div id="sidebar-content" class="h-100">
+    <div id="sidebar-header" class="d-flex align-items-center">
+      <img
+        src="assets/logo.svg"
+        width="30"
+        height="30"
+        class="d-inline-block align-top"
+        alt=""
+        loading="lazy"
+      />
+      <div *ngIf="!collapsed" id="sidebar-header-text" class="ml-3">To Do</div>
+    </div>
+    <div id="sidebar-collapse" #sidebarollapse class="mt-3 text-center">
+      <a (click)="toggleCollapse()">
+        <img
+          src="assets/collapse.svg"
+          width="30"
+          height="30"
+          class="d-inline-block align-top"
+          alt=""
+          loading="lazy"
+      /></a>
+    </div>
+    <div id="sidebar-menu">
+      <div class="menu-group mt-4">
+        <div *ngIf="!collapsed" class="menu-group-title mb-2">TASKS</div>
+        <ul class="menu-items">
+          <li
+            [routerLink]="['/task']"
+            [queryParams]="{ day: 'today' }"
+            class="d-flex align-items-center selected"
+          >
+            <mat-icon color="accent">schedule </mat-icon>
+            <a *ngIf="!collapsed" class="menu-item-text ml-2">Today</a>
+          </li>
+          <li
+            class="d-flex align-items-center"
+            [routerLink]="['/task']"
+            [queryParams]="{ important: 'true' }"
+          >
+            <mat-icon color="accent">grade </mat-icon>
+            <a *ngIf="!collapsed" class="menu-item-text ml-2">Important</a>
+          </li>
+          <li
+            [routerLink]="['/task']"
+            [queryParams]="{ day: 'all' }"
+            class="d-flex align-items-center"
+          >
+            <mat-icon color="accent">date_range </mat-icon>
+            <a *ngIf="!collapsed" class="menu-item-text ml-2">All Tasks</a>
+          </li>
+        </ul>
+        <button
+          *ngIf="!collapsed"
+          id="new-task-button"
+          class="py-2 px-4 custom-primary"
+          (click)="addNewTask()"
+        >
+          New Task
+        </button>
+      </div>
+      <div class="menu-group mt-4">
+        <div *ngIf="!collapsed" class="menu-group-title mb-2">LISTS</div>
+        <ul *ngIf="collapsed" class="menu-items">
+          <li class="d-flex align-items-center" (click)="collapsed = false">
+            <mat-icon color="accent">list </mat-icon>
+            <a *ngIf="!collapsed" class="menu-item-text ml-2" href=""> List</a>
+          </li>
+        </ul>
+        <ul *ngIf="!collapsed" id="list-menu" class="menu-items">
+          <li class="d-flex align-items-center">
+            <mat-icon color="accent">shopping_cart </mat-icon>
+            <a
+              [routerLink]="['/task']"
+              [queryParams]="{ list: 'shopping' }"
+              *ngIf="!collapsed"
+              class="menu-item-text ml-2"
+              (click)="collapsed = mediaQuery.matches"
+            >
+              Shopping</a
+            >
+          </li>
+          <li class="d-flex align-items-center">
+            <mat-icon color="accent">fitness_center </mat-icon>
+            <a
+              [routerLink]="['/task']"
+              [queryParams]="{ list: 'fitness' }"
+              *ngIf="!collapsed"
+              class="menu-item-text ml-2"
+              (click)="collapsed = mediaQuery.matches"
+            >
+              Fitness</a
+            >
+          </li>
+          <li
+            class="d-flex align-items-center"
+            *ngFor="let list of customLIsts"
+          >
+            <mat-icon color="accent">list </mat-icon>
+            <a
+              [routerLink]="['/task']"
+              [queryParams]="{ list: list }"
+              *ngIf="!collapsed"
+              class="menu-item-text ml-2"
+              (click)="collapsed = mediaQuery.matches"
+            >
+              {{ list }}</a
+            >
+          </li>
+        </ul>
+
+        <div *ngIf="!collapsed" id="new-list-input" class="py-1 p-0">
+          <input [(ngModel)]="newListName" type="text" placeholder="New List" />
+          <mat-icon color="accent" (click)="addNewLsit()">add </mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="mediaQuery.matches && !collapsed"
+  id="overlay"
+  (click)="toggleCollapse()"
+></div>

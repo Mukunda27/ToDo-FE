@@ -18,6 +18,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 
 import { NgxMatIntlTelInputModule } from 'ngx-mat-intl-tel-input';
+import { PasswordResetComponent } from './password-reset/password-reset.component';
+import { NewPasswordComponent } from './new-password/new-password.component';
+import { NewPasswordGuard } from './new-password/new-password.guard';
 
 const routes: Routes = [
   {
@@ -36,13 +39,22 @@ const routes: Routes = [
       {
         path: 'signup',
         component: SignupComponent
+      },
+      {
+        path: 'password-reset',
+        component: PasswordResetComponent
+      },
+      {
+        path: 'new-password/:token',
+        component: NewPasswordComponent,
+        canActivate: [NewPasswordGuard]
       }
     ]
   }
 ];
 
 @NgModule({
-  declarations: [LoginComponent, SignupComponent, UserComponent],
+  declarations: [LoginComponent, SignupComponent, UserComponent, PasswordResetComponent, NewPasswordComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -58,5 +70,6 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   exports: [RouterModule],
+  providers: [NewPasswordGuard]
 })
 export class UserModule { }

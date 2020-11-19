@@ -1,0 +1,144 @@
+@import "../../../_custom-theme.scss";
+
+button.profile-btn {
+  border: 0;
+  height: 45px;
+  width: 45px;
+  border-radius: 22.5px;
+  color: white;
+  outline: none;
+  background-color: $primary;
+  transition: all 0.1s ease-in;
+}
+
+button.profile-btn:focus {
+  outline: none;
+}
+
+button.profile-btn:hover {
+  outline: none;
+}
+
+button.notifications-btn {
+  border: 0;
+  height: 42px;
+  width: 42px;
+  border-radius: 21px;
+
+  outline: none;
+  background-color: transparent;
+  transition: all 0.1s ease-in;
+
+  fa-icon {
+    color: $primary;
+  }
+}
+
+button.notifications-btn:focus {
+  outline: none;
+}
+
+#nav-bar {
+  position: relative;
+}
+
+#profile-panel {
+  display: none;
+  position: absolute;
+  z-index: 700;
+  right: 0;
+  top: 80%;
+  background-color: white;
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+
+  #name {
+    font-size: 20px;
+    font-family: "Fredoka One", cursive;
+  }
+
+  #email {
+    font-size: 16px;
+  }
+
+  .divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+
+  a {
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+    color: $primary;
+    font-weight: 800;
+  }
+}
+
+#profile-menu:hover #profile-panel {
+  display: block;
+}
+
+#notifications-panel {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 80%;
+  width: 300px;
+  max-width: 85%;
+  background-color: white;
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  z-index: 700;
+
+  #notifications-header {
+    font-size: 20px;
+    font-family: "Fredoka One", cursive;
+  }
+
+  .divider {
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+
+  a {
+    font-size: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: tomato;
+    font-weight: bold;
+  }
+
+  #notification-message {
+    font-size: 13px;
+  }
+}
+
+#notifications-menu:hover #notifications-panel {
+  display: block;
+}
+
+#friends-menu {
+  button {
+    font-family: "Fredoka One", cursive;
+
+    border: 2px solid $primary;
+    border-radius: 25px;
+    color: $primary;
+    background-color: white;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  fa-icon {
+    color: $primary;
+  }
+}

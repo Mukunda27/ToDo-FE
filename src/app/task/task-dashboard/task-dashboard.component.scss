@@ -1,0 +1,298 @@
+@import "../../../_custom-theme.scss";
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+
+$medium: 768px;
+
+@mixin medium {
+  @media (max-width: #{$medium}) {
+    @content;
+  }
+}
+
+#task-area-header {
+  #task-area-title {
+    @include font-size(1.5rem);
+    font-family: "Fredoka One", cursive;
+  }
+
+  #create-task-btn {
+    border: 1px solid $primary;
+    color: white;
+    border-radius: 50px;
+    transition: all 0.2s ease-in;
+  }
+
+  #create-task-btn:focus {
+    outline: none;
+  }
+
+  #create-task-btn:hover {
+    outline: none;
+    transform: translateY(-2px);
+  }
+}
+
+.task-card {
+  position: relative;
+  background-color: white;
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 5px 5px;
+
+  #title {
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  #task-finish {
+    mat-label {
+      font-size: 14px;
+    }
+  }
+
+  #list {
+    font-size: 12px;
+    border: 2px solid $accent;
+    border-radius: 6px;
+  }
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+
+    left: 0;
+    top: 0;
+    height: 4px;
+    border-radius: 20px;
+    background-color: $primary;
+  }
+
+  fa-icon {
+    cursor: pointer;
+  }
+}
+
+input[type="checkbox"] {
+  position: relative;
+  height: 22px;
+  width: 22px;
+  color: #000;
+  border: 1px solid #888;
+  border-radius: 11px;
+  appearance: none;
+  outline: 0;
+  cursor: pointer;
+  transition: background 0.3s ease-in;
+  &::before {
+    position: absolute;
+    content: "";
+    display: block;
+    top: 2px;
+    left: 7px;
+    width: 8px;
+    height: 14px;
+    border-style: solid;
+    border-color: white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+  }
+  &:checked {
+    color: white;
+    border-color: $accent;
+    background: $accent;
+    &::before {
+      opacity: 1;
+    }
+    + label {
+      color: #bbb;
+      text-decoration: line-through solid $primary;
+    }
+  }
+}
+
+label {
+  position: relative;
+  cursor: pointer;
+  transition: text-decoration 0.3s ease-in;
+}
+
+#creation-progress-bar-1 {
+  display: inline-block;
+  position: absolute;
+  height: 4px;
+  border-radius: 15px;
+  left: 0;
+  background-color: $primary;
+  animation: createprogressright 2s linear infinite;
+}
+
+#creation-progress-bar-2 {
+  display: inline-block;
+  position: absolute;
+  height: 4px;
+  border-radius: 15px;
+  right: 0;
+  background-color: $primary;
+  animation: createprogressleft 2s linear infinite;
+}
+
+@keyframes createprogressright {
+  0% {
+    opacity: 1;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 100%;
+  }
+
+  100% {
+    opacity: 0;
+    width: 100%;
+  }
+}
+
+@keyframes createprogressleft {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}
+
+#create-task {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  width: 500px;
+  max-width: 85%;
+  max-height: 85%;
+  overflow-y: auto;
+  background-color: white;
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 999;
+  #create-task-title {
+    font-size: 20px;
+    font-family: "Fredoka One", cursive;
+  }
+
+  mat-icon {
+    cursor: pointer;
+  }
+
+  form {
+    font-size: 14px;
+
+    @include medium {
+      font-size: 12px;
+    }
+  }
+}
+
+#new-task-button {
+  border-radius: 50px;
+  color: white;
+  outline: none;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid $accent;
+}
+
+#new-task-button:focus {
+  outline: none;
+}
+
+#new-task-button:hover {
+  outline: none;
+}
+
+#progress-indicator {
+  position: absolute;
+  width: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(2% 0, 100% 0%, 98% 100%, 0% 100%);
+}
+
+#empty-task {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: 70%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+::ng-deep .mat-paginator-outer-container {
+  background-color: $custom-bg !important;
+}
+
+#inner-container {
+  position: relative;
+  height: 10px;
+}
+
+#progress-bar-1 {
+  display: inline-block;
+  position: absolute;
+  height: 10px;
+  left: 0;
+  background-color: $primary;
+  animation: progressright 2s linear infinite;
+}
+
+#progress-bar-2 {
+  display: inline-block;
+  position: absolute;
+  height: 10px;
+
+  right: 0;
+  background-color: $primary;
+  animation: progressleft 2s linear infinite;
+}
+
+@keyframes progressright {
+  0% {
+    opacity: 1;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 100%;
+  }
+
+  100% {
+    opacity: 0;
+    width: 100%;
+  }
+}
+
+@keyframes progressleft {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  50% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 100%;
+  }
+}

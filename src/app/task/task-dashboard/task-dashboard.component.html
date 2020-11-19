@@ -1,0 +1,220 @@
+<div class="task-dashboard d-flex h-100 overflow-hidden">
+  <div>
+    <app-sidebar (createTask)="creatingTask = true"> </app-sidebar>
+  </div>
+  <div class="px-lg-4 px-2 py-4 flex-grow-1 h-100 overflow-auto">
+    <div class="d-flex flex-column h-100">
+      <div>
+        <app-header> </app-header>
+      </div>
+      <div class="task-area flex-grow-1 p-lg-4 p-2 position-relative">
+        <div class="d-flex my-3" id="task-area-header">
+          <div id="task-area-title" class="mr-5">
+            {{ taskAreaHeader | titlecase }}
+          </div>
+          <button
+            id="create-task-btn"
+            class="custom-primary"
+            (click)="creatingTask = true"
+          >
+            New Task
+          </button>
+        </div>
+
+        <div *ngIf="fetching" id="progress-indicator">
+          <div id="inner-container" class="w-100">
+            <span id="progress-bar-1"></span>
+            <span id="progress-bar-2"></span>
+          </div>
+        </div>
+
+        <div *ngIf="!fetching && allTasks.length === 0" id="empty-task">
+          Oops! You do not have any tasks in this list. Start creating new
+          tasks.
+        </div>
+
+        <div class="row w-100 mx-auto">
+          <div class="col-12 col-md-6 col-xl-4" *ngFor="let task of allTasks">
+            <div class="task-card p-3 mt-4 w-100">
+              <div
+                id="check-box"
+                class="task-title my-2 d-flex align-items-top"
+              >
+                <input
+                  class="mr-3 flex-shrink-0"
+                  type="checkbox"
+                  id="todo"
+                  name="todo"
+                  [(ngModel)]="task.completed"
+                  (ngModelChange)="statusChange($event, task)"
+                />
+                <label id="title" data-content="task.title">{{
+                  task.title
+                }}</label>
+              </div>
+              <div id="task-finish" class="d-flex my-1">
+                <mat-icon class="mr-3" color="primary"> event </mat-icon>
+                <mat-label class="mr-3"
+                  >{{ task.finishByDate | date }}
+                </mat-label>
+                <mat-label class="mr-3"> {{ task.finishByTime }} </mat-label>
+              </div>
+              <div
+                id="task-details"
+                class="d-flex align-items-center justify-content-between my-1"
+              >
+                <div class="d-flex align-items-center">
+                  <div id="important" class="mr-2" *ngIf="task.important">
+                    <fa-icon
+                      [icon]="faStar"
+                      [styles]="{ color: '#E5B710' }"
+                    ></fa-icon>
+                  </div>
+                  <div
+                    id="list"
+                    class="d-flex align-items-center px-1"
+                    *ngIf="task.list"
+                  >
+                    <mat-icon class="mr-2" color="accent"> list </mat-icon>
+                    <mat-label> {{ task.list | titlecase }} </mat-label>
+                  </div>
+                </div>
+                <div id="delete-btn">
+                  <fa-icon
+                    [icon]="faTrashAlt"
+                    [styles]="{ color: 'tomato' }"
+                    (click)="deleteTask(task)"
+                  ></fa-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!fetching && maxTasks > tasksPerPage">
+        <mat-paginator
+          class="my-3"
+          [length]="maxTasks"
+          [pageSize]="tasksPerPage"
+          (page)="onChangedPage($event)"
+        ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="creatingTask" id="create-task" class="px-4">
+  <span *ngIf="taskCreationProgress" id="creation-progress-bar-1"></span>
+  <span *ngIf="taskCreationProgress" id="creation-progress-bar-2"></span>
+  <div
+    id="task-header"
+    class="d-flex justify-content-between align-items-center mt-4"
+  >
+    <div id="create-task-title">Add New Task</div>
+    <mat-icon color="primary" (click)="creatingTask = false"> cancel</mat-icon>
+  </div>
+  <div id="task-details" class="mt-4">
+    <form (submit)="createTask(newTaskForm)" #newTaskForm="ngForm">
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>What are you planningg</mat-label>
+        <input
+          matInput
+          ngModel
+          name="title"
+          type="text"
+          #title="ngModel"
+          required
+          [errorStateMatcher]="matcher"
+        />
+        <mat-error *ngIf="title.hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-label class=""> <strong> Finish Task By</strong> </mat-label>
+
+      <mat-form-field class="w-100 mt-2" color="accent" appearance="outline">
+        <mat-label>Pick a date</mat-label>
+        <input
+          matInput
+          name="finishDate"
+          required
+          ngModel
+          [(ngModel)]="finishDate"
+          [matDatepicker]="picker"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="newTaskForm.hasError('required')">
+          Field is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="row finishTime align-items-center">
+        <div class="col-lg-5 col-7">
+          <mat-form-field class="w-50" color="accent" appearance="outline">
+            <mat-select [(ngModel)]="selectedHour" name="hour">
+              <mat-option *ngFor="let hour of hours" [value]="hour">
+                {{ hour }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="w-50" color="accent" appearance="outline">
+            <mat-select [(ngModel)]="selectedMinute" name="minute">
+              <mat-option *ngFor="let minute of minutes" [value]="minute">
+                {{ minute }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7 col-5 mb-3">
+          <mat-chip-list
+            multiple="false"
+            selectable="true"
+            aria-label="date selection"
+          >
+            <mat-chip
+              *ngFor="let option of timeOptions"
+              color="primary"
+              class="mr-1"
+              [selected]="option === selectedTimeOption"
+              (click)="selectTimeOption(option)"
+              >{{ option }}</mat-chip
+            >
+          </mat-chip-list>
+        </div>
+      </div>
+
+      <mat-form-field class="w-100" color="accent" appearance="outline">
+        <mat-label>Add to List</mat-label>
+        <mat-select [(ngModel)]="selectedList" name="list">
+          <mat-option>-- None --</mat-option>
+          <mat-option *ngFor="let list of allLists" [value]="list">
+            {{ list | titlecase }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-slide-toggle
+        class="mt-2"
+        color="primary"
+        ngModel
+        name="important"
+        #important="ngModel"
+      >
+        Mark as Important
+      </mat-slide-toggle>
+
+      <button
+        [disabled]="taskCreationProgress"
+        [ngStyle]="{
+          'background-color': taskCreationProgress ? '#404760' : '#151d4d'
+        }"
+        id="new-task-button"
+        type="submit"
+        class="py-2 px-4 d-block my-4 w-50"
+      >
+        Save Task
+      </button>
+    </form>
+  </div>
+</div>
