@@ -6,4 +6,5 @@ export interface Task {
   list: string;
   important: boolean;
   completed: boolean;
+  creator: string;
 }

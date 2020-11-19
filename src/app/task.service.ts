@@ -45,7 +45,8 @@ export class TaskService {
               finishByTime: task.finishByTime,
               list: task.list,
               important: task.important,
-              completed: task.completed
+              completed: task.completed,
+              creator: task.creator.name
             };
             return transformedTask;
           }),
@@ -75,7 +76,8 @@ export class TaskService {
               finishByTime: task.finishByTime,
               list: task.list,
               important: task.important,
-              completed: task.completed
+              completed: task.completed,
+              creator: task.creator.name
             };
 
             return transformedTask;
@@ -106,7 +108,8 @@ export class TaskService {
               finishByTime: task.finishByTime,
               list: task.list,
               important: task.important,
-              completed: task.completed
+              completed: task.completed,
+              creator: task.creator.name
             };
 
             return transformedTask;
@@ -138,7 +141,8 @@ export class TaskService {
               finishByTime: task.finishByTime,
               list: task.list,
               important: task.important,
-              completed: task.completed
+              completed: task.completed,
+              creator: task.creator.name
             };
 
             return transformedTask;

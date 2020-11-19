@@ -123,7 +123,8 @@ export class TaskDashboardComponent implements OnInit, OnDestroy {
       finishByTime: time,
       list: this.selectedList,
       important,
-      completed: false
+      completed: false,
+      creator: ''
     };
     const statuschangeMessage = `${this.authenticatedUser.name} has created a new task - ${task.title}`;
     this.taskCreationProgress = true;

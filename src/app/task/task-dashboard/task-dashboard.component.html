@@ -36,10 +36,7 @@
         <div class="row w-100 mx-auto">
           <div class="col-12 col-md-6 col-xl-4" *ngFor="let task of allTasks">
             <div class="task-card p-3 mt-4 w-100">
-              <div
-                id="check-box"
-                class="task-title my-2 d-flex align-items-top"
-              >
+              <div id="check-box" class="task-title d-flex align-items-top">
                 <input
                   class="mr-3 flex-shrink-0"
                   type="checkbox"
@@ -52,7 +49,13 @@
                   task.title
                 }}</label>
               </div>
-              <div id="task-finish" class="d-flex my-1">
+              <div id="task-creation" class="d-flex mb-1">
+                <mat-icon color="primary"> account_circle </mat-icon>
+                <mat-label class="ml-3"
+                  >{{ task.creator | titlecase }}
+                </mat-label>
+              </div>
+              <div id="task-finish" class="d-flex">
                 <mat-icon class="mr-3" color="primary"> event </mat-icon>
                 <mat-label class="mr-3"
                   >{{ task.finishByDate | date }}
